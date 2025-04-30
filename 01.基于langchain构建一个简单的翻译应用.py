@@ -1,22 +1,24 @@
-import langchain
-
 from langchain_deepseek import ChatDeepSeek
 
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.output_parsers import StrOutputParser
+
+from langchain_core.prompts import ChatPromptTemplate
 
 from dotenv import load_dotenv
 
 import os
 
+# 1.加载.env文件中的DEEPSEEK_API_KEY
 load_dotenv()
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
-#print(DEEPSEEK_API_KEY)
 
-message = [
-    SystemMessage(content="将下面的内容从中文翻译到英文"),
-    HumanMessage(content="我爱中国"),
-]
+# 2.构建提示词模板
+system_prompt = "请将下面的内容从{language1}翻译到{language2}"
+prompt_template = ChatPromptTemplate.from_messages(
+    [("system", system_prompt), ("user", "{text}")]
+)
 
+# 3.构建模型
 model = ChatDeepSeek(
     model="deepseek-chat",
     temperature=0,
@@ -25,4 +27,12 @@ model = ChatDeepSeek(
     base_url="https://api.deepseek.com/v1"
 )
 
-print(model.invoke(message))
+# 4.构建解析器
+parser = StrOutputParser()
+
+# 5.构建链
+chain = prompt_template | model | parser
+
+# 6.获取结果
+result = chain.invoke({"language1": "中文", "language2": "英文", "text": "我爱中国"})
+print(result)
