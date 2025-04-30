@@ -4,6 +4,12 @@ from langchain_core.output_parsers import StrOutputParser
 
 from langchain_core.prompts import ChatPromptTemplate
 
+from fastapi import FastAPI
+
+from langserve import add_routes
+
+import uvicorn
+
 from dotenv import load_dotenv
 
 import os
@@ -33,6 +39,25 @@ parser = StrOutputParser()
 # 5.构建链
 chain = prompt_template | model | parser
 
-# 6.获取结果
+# 6.构建app
+app = FastAPI(
+    title="LangChain Server",
+    version="1.0",
+    description="Translate text from language1 to language2"    # 这里描述使用中文就会有问题
+)
+
+# 7.添加链的路由
+add_routes(
+    app,
+    chain,
+    path='/chain',
+    enabled_endpoints=["invoke", "stream", "stream_log"]
+)
+
+'''# 获取结果
 result = chain.invoke({"language1": "中文", "language2": "英文", "text": "我爱中国"})
-print(result)
+print(result)'''
+
+# 8.测试
+if __name__ == "__main__":
+    uvicorn.run(app, host="localhost", port=8000)
