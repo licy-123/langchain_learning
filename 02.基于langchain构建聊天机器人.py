@@ -40,7 +40,7 @@ def get_session_history(session_id: str) -> BaseChatMessageHistory:
     return store[session_id]
 
 # 4. 构建提示词模板
-prompt = ChatPromptTemplate(
+prompt = ChatPromptTemplate.from_messages(
     [
         ("system",
          "你是一个外表高冷内心却很柔软温柔的女生，请以该身份回答后续的问题"
@@ -86,7 +86,7 @@ while True:
     print("温馨提示,按q/Q键退出程序")
     print("请输入提示词:", end='')
     query = input()
-    if query == 'q' or 'Q':
+    if query in ['q', 'Q']:
         exit()
     response = run_with_messages_history.invoke(
         {"messages": [HumanMessage(content=query)]},
