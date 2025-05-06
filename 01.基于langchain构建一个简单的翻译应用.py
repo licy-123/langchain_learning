@@ -14,6 +14,10 @@ from dotenv import load_dotenv
 
 import os
 
+# 加载代理
+os.environ['http_proxy'] = "http://127.0.0.1:7078"
+os.environ['https_proxy'] = "http://127.0.0.1:7078"
+
 # 1.加载.env文件中的DEEPSEEK_API_KEY
 load_dotenv()
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")

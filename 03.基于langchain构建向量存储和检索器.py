@@ -16,6 +16,10 @@ import dotenv
 
 import os
 
+# 加载代理
+os.environ['http_proxy'] = "http://127.0.0.1:7078"
+os.environ['https_proxy'] = "http://127.0.0.1:7078"
+
 # 加载环境
 dotenv.load_dotenv()
 GUIJI_API_KEY = os.getenv("GUIJI_API_KEY")
