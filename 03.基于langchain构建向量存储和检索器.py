@@ -51,7 +51,7 @@ class GuiJiEmbeddings(Embeddings):
         super().__init__()
         self.model = "BAAI/bge-m3"
         self.url = "https://api.siliconflow.cn/v1/embeddings"
-        self.headers = headers = {
+        self.headers = {
     "Authorization": f"Bearer {GUIJI_API_KEY}",
     "Content-Type": "application/json"
 }
